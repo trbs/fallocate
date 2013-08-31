@@ -69,7 +69,7 @@ fallocate_fallocate(PyObject *self, PyObject *args)
     Py_RETURN_NONE;
 }
 
-#ifdef HAVE_POSIX_FALLOCATE
+#ifdef posix_fallocate
 PyDoc_STRVAR(posix_posix_fallocate__doc__,
 "posix_fallocate(fd, offset, len)\n\n\
 Ensures that enough disk space is allocated for the file specified by fd\n\
@@ -96,7 +96,7 @@ posix_posix_fallocate(PyObject *self, PyObject *args)
 }
 #endif
 
-#ifdef HAVE_POSIX_FADVISE
+#ifdef posix_fadvise
 PyDoc_STRVAR(posix_posix_fadvise__doc__,
 "posix_fadvise(fd, offset, len, advice)\n\n\
 Announces an intention to access data in a specific pattern thus allowing\n\
@@ -132,10 +132,10 @@ static PyMethodDef module_methods[] = {
 #if defined(linux) || defined(__APPLE__)
     {"fallocate", fallocate_fallocate, METH_VARARGS, fallocate_fallocate__doc__},
 #endif
-#ifdef HAVE_POSIX_FALLOCATE
+#ifdef posix_fallocate
     {"posix_fallocate", posix_posix_fallocate, METH_VARARGS, posix_posix_fallocate__doc__},
 #endif
-#ifdef HAVE_POSIX_FADVISE
+#ifdef posix_fadvise
     {"posix_fadvise", posix_posix_fadvise, METH_VARARGS, posix_posix_fadvise__doc__},
 #endif
     {NULL, NULL, 0, NULL}
@@ -156,7 +156,7 @@ init_fallocate(void)
         PyModule_AddIntMacro(m, FALLOC_FL_PUNCH_HOLE) == -1)
         return;
 #endif
-#ifdef HAVE_POSIX_FADVISE
+#ifdef posix_fadvise
     /* constants for posix_fadvise */
     if (PyModule_AddIntMacro(m, POSIX_FADV_NORMAL) == -1 ||
         PyModule_AddIntMacro(m, POSIX_FADV_SEQUENTIAL) == -1 ||
