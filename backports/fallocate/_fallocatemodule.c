@@ -1,6 +1,9 @@
 #include <Python.h>
 #include <fcntl.h>
 #include <errno.h>
+#ifdef linux
+#include <falloc.h>
+#endif
 
 /* Set fallocate error from errno, and return NULL */
 static PyObject *
