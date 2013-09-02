@@ -43,6 +43,34 @@ setup(
     name = "fallocate",
     version = __version__,
     description = "Module to expose posix_fallocate(3), posix_fadvise(3) and fallocate(2)",
+    long_description = """
+=========
+fallocate
+=========
+
+fallocate exposes an interface to fallocate(2), posix_fallocate(3) and posix_fadvise(3).
+
+Under Mac OS X the fallocate() method will use the apple equivalent of fallocate(2).
+Note that this might not be exactly the same.
+
+When using the wrapper functions around the fallocate(2) call, this is the default, the
+arguments given to the function are slightly different then the c call.
+
+This module has the arguments like:
+
+::
+
+  fallocate(fd, offset, length, mode=0)
+
+While in C the function looks like:
+
+::
+
+  fallocate(fd, mode, offset, length)
+
+The main reason for this is that the mode argument tends not to be used much and thus
+having the default as a keyword argument is much easier then having to specify 0 everytime.
+    """,
     author = "I.S. van Oostveen",
     author_email = "trbs@trbs.net",
     url = "https://github.com/trbs/fallocate",
