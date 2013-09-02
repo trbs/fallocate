@@ -5,6 +5,7 @@
 #include <linux/falloc.h>
 #endif
 
+
 /* Set fallocate error from errno, and return NULL */
 static PyObject *
 fallocate_error(void)
@@ -32,7 +33,11 @@ PyDoc_STRVAR(fallocate_fallocate__doc__,
 "fallocate(fd, mode, offset, len)\n\n\
 fallocate() allows the caller to directly manipulate the allocated\n\
 disk space for the file referred to by fd for the byte range starting\n\
-at offset and continuing for len bytes.");
+at offset and continuing for len bytes.\n\n\
+mode is only available in Linux, it should always be 0 unless one of the\n\
+two following possible flags are specified:\n\n\
+  FALLOC_FL_KEEP_SIZE  - do not grow file, default is extend size\n\
+  FALLOC_FL_PUNCH_HOLE - punches a hole in file, de-allocates range\n");
 
 static PyObject *
 fallocate_fallocate(PyObject *self, PyObject *args)
@@ -43,12 +48,12 @@ fallocate_fallocate(PyObject *self, PyObject *args)
             &fd, &mode, _parse_off_t, &offset, _parse_off_t, &len))
         return NULL;
 
-#ifdef linux
+#ifdef HAVE_FALLOCATE
     Py_BEGIN_ALLOW_THREADS
     res = fallocate(fd, mode, offset, len);
     Py_END_ALLOW_THREADS
 #endif
-#ifdef __APPLE__
+#ifdef HAVE_APPLE_F_ALLOCATECONTIG
     Py_BEGIN_ALLOW_THREADS
     fstore_t store = {F_ALLOCATECONTIG, F_PEOFPOSMODE, offset, len, 0};
     res = fcntl(fd, F_PREALLOCATE, &store);
@@ -69,7 +74,7 @@ fallocate_fallocate(PyObject *self, PyObject *args)
     Py_RETURN_NONE;
 }
 
-#ifdef posix_fallocate
+#ifdef HAVE_POSIX_FALLOCATE
 PyDoc_STRVAR(posix_posix_fallocate__doc__,
 "posix_fallocate(fd, offset, len)\n\n\
 Ensures that enough disk space is allocated for the file specified by fd\n\
@@ -96,7 +101,7 @@ posix_posix_fallocate(PyObject *self, PyObject *args)
 }
 #endif
 
-#ifdef posix_fadvise
+#ifdef HAVE_POSIX_FADVISE
 PyDoc_STRVAR(posix_posix_fadvise__doc__,
 "posix_fadvise(fd, offset, len, advice)\n\n\
 Announces an intention to access data in a specific pattern thus allowing\n\
@@ -129,13 +134,13 @@ posix_posix_fadvise(PyObject *self, PyObject *args)
 #endif
 
 static PyMethodDef module_methods[] = {
-#if defined(linux) || defined(__APPLE__)
+#if defined(HAVE_FALLOCATE) || defined(HAVE_APPLE_F_ALLOCATECONTIG)
     {"fallocate", fallocate_fallocate, METH_VARARGS, fallocate_fallocate__doc__},
 #endif
-#ifdef posix_fallocate
+#ifdef HAVE_POSIX_FALLOCATE
     {"posix_fallocate", posix_posix_fallocate, METH_VARARGS, posix_posix_fallocate__doc__},
 #endif
-#ifdef posix_fadvise
+#ifdef HAVE_POSIX_FADVISE
     {"posix_fadvise", posix_posix_fadvise, METH_VARARGS, posix_posix_fadvise__doc__},
 #endif
     {NULL, NULL, 0, NULL}
@@ -144,19 +149,46 @@ static PyMethodDef module_methods[] = {
 static char module_docstring[] =
     "Backport of fallocate, posix_fallocate and posix_fadvise to Python 2.x";
 
+#if PY_MAJOR_VERSION >= 3
+static PyModuleDef _fallocatemodule = {
+    PyModuleDef_HEAD_INIT,
+    "_fallocate",
+    module_docstring,
+    -1,
+    module_methods,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+};
+
+PyMODINIT_FUNC
+PyInit__fallocate(void)
+{
+    PyObject *m = PyModule_Create(&_fallocatemodule);
+    if (m == NULL)
+        return NULL;
+
+#else
+
 PyMODINIT_FUNC
 init_fallocate(void)
 {
     PyObject *m = Py_InitModule3("_fallocate", module_methods, module_docstring);
     if (m == NULL)
         return;
+#endif
 
-#ifdef linux
+#ifdef HAVE_FALLOCATE
     if (PyModule_AddIntMacro(m, FALLOC_FL_KEEP_SIZE) == -1 ||
         PyModule_AddIntMacro(m, FALLOC_FL_PUNCH_HOLE) == -1)
+#if PY_MAJOR_VERSION >= 3
+        return NULL;
+#else
         return;
 #endif
-#ifdef posix_fadvise
+#endif
+#ifdef HAVE_POSIX_FADVISE
     /* constants for posix_fadvise */
     if (PyModule_AddIntMacro(m, POSIX_FADV_NORMAL) == -1 ||
         PyModule_AddIntMacro(m, POSIX_FADV_SEQUENTIAL) == -1 ||
@@ -164,7 +196,15 @@ init_fallocate(void)
         PyModule_AddIntMacro(m, POSIX_FADV_NOREUSE) == -1 ||
         PyModule_AddIntMacro(m, POSIX_FADV_WILLNEED) == -1 ||
         PyModule_AddIntMacro(m, POSIX_FADV_DONTNEED) == -1)
+#if PY_MAJOR_VERSION >= 3
+        return NULL;
+#else
         return;
+#endif
+#endif
+
+#if PY_MAJOR_VERSION >= 3
+        return m;
 #endif
 };
 
