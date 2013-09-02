@@ -1,0 +1,5 @@
+include README
+include MANIFEST.in
+recursive-include fallocate *
+prune fallocate/_fallocate.so
+
