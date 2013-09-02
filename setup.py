@@ -6,8 +6,7 @@ import glob
 from distutils.command.build_ext import build_ext
 from distutils.core import setup
 from distutils.extension import Extension
-
-__version__ = "1.0"
+from fallocate import __version__
 
 def find_in_file(filename, s):
     try:
