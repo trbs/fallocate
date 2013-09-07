@@ -95,7 +95,7 @@ posix_posix_fallocate(PyObject *self, PyObject *args)
     Py_END_ALLOW_THREADS
     if (res != 0) {
         errno = res;
-        return posix_error();
+        return fallocate_error();
     }
     Py_RETURN_NONE;
 }
@@ -127,7 +127,7 @@ posix_posix_fadvise(PyObject *self, PyObject *args)
     Py_END_ALLOW_THREADS
     if (res != 0) {
         errno = res;
-        return posix_error();
+        return fallocate_error();
     }
     Py_RETURN_NONE;
 }
