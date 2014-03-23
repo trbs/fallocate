@@ -1,6 +1,6 @@
 import warnings
 
-__version__ = "1.0.2"
+__version__ = "1.2.0"
 
 try:
     from ._fallocate import fallocate as _fallocate
