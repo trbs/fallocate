@@ -21,7 +21,7 @@ try:
     def posix_fallocate(fd, offset, len):
         if isinstance(fd, file):
             fd = fd.fileno()
-        return _possix_fallocate(fd, offset, len)
+        return _posix_fallocate(fd, offset, len)
     posix_fallocate.__doc__ = _posix_fallocate.__doc__
 
     def posix_fadvise(fd, offset, len, advise):
