@@ -1,6 +1,6 @@
 import warnings
 
-__version__ = "1.2.0"
+__version__ = "1.4.0"
 
 try:
     from ._fallocate import fallocate as _fallocate
@@ -37,4 +37,3 @@ except ImportError:
     def posix_fadvise(fd, offset, len, advise):
         """ posix_advise(3) was not found on this system"""
         warnings.warn("posix_advise(3) was not found on this system")
-
