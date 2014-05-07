@@ -4,6 +4,7 @@ __version__ = "1.2.0"
 
 try:
     from ._fallocate import fallocate as _fallocate
+    from ._fallocate import FALLOC_FL_KEEP_SIZE, FALLOC_FL_PUNCH_HOLE
     def fallocate(fd, offset, len, mode=0):
         if isinstance(fd, file):
             fd = fd.fileno()
