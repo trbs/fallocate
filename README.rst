@@ -2,6 +2,8 @@
 fallocate
 =========
 
+.. image:: https://travis-ci.org/trbs/fallocate.svg?branch=master   :target: https://travis-ci.org/trbs/fallocate
+
 fallocate exposes an interface to fallocate(2), posix_fallocate(3) and
 posix_fadvise(3).
 
