@@ -13,6 +13,10 @@ except ImportError:
     def fallocate(fd, offset, len, mode=0):
         """ fallocate(2) or OSX equivalent was not found on this system"""
         warnings.warn("fallocate(2) or OSX equivalent was not found on this system")
+try:
+    from ._fallocate import FALLOC_FL_KEEP_SIZE, FALLOC_FL_PUNCH_HOLE
+except ImportError:
+    pass
 
 try:
     from ._fallocate import posix_fallocate as _posix_fallocate
