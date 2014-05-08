@@ -20,7 +20,7 @@ try:
             FALLOC_FL_KEEP_SIZE  - do not grow file, default is extend size
             FALLOC_FL_PUNCH_HOLE - punches a hole in file, de-allocates range
         """
-        if isinstance(fd, file):
+        if hasattr(fd, 'fileno'):
             fd = fd.fileno()
         return _fallocate(fd, mode, offset, len)
     fallocate.__doc__ = _fallocate.__doc__
@@ -38,13 +38,13 @@ try:
     from ._fallocate import posix_fadvise as _posix_fadvise
     from ._fallocate import POSIX_FADV_NORMAL, POSIX_FADV_SEQUENTIAL, POSIX_FADV_RANDOM, POSIX_FADV_NOREUSE, POSIX_FADV_WILLNEED, POSIX_FADV_DONTNEED
     def posix_fallocate(fd, offset, len):
-        if isinstance(fd, file):
+        if hasattr(fd, 'fileno'):
             fd = fd.fileno()
         return _posix_fallocate(fd, offset, len)
     posix_fallocate.__doc__ = _posix_fallocate.__doc__
 
     def posix_fadvise(fd, offset, len, advise):
-        if isinstance(fd, file):
+        if hasattr(fd, 'fileno'):
             fd = fd.fileno()
         return _posix_fadvise(fd, offset, len, advise)
     posix_fadvise.__doc__ = _posix_fadvise.__doc__
