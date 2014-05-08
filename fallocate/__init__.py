@@ -5,6 +5,21 @@ __version__ = "1.4.0"
 try:
     from ._fallocate import fallocate as _fallocate
     def fallocate(fd, offset, len, mode=0):
+        """
+        fallocate(fd, offset, len, [mode=0])
+
+        Calls fallocate() on the file object or file descriptor. This allows
+        the caller to directly manipulate the allocated disk space for the file
+        referred to by fd for the byte range starting at offset and continuing
+        for len bytes.
+
+        mode is only available in Linux.
+
+        It should always be 0 unless one of the two following possible flags are
+        specified:
+            FALLOC_FL_KEEP_SIZE  - do not grow file, default is extend size
+            FALLOC_FL_PUNCH_HOLE - punches a hole in file, de-allocates range
+        """
         if isinstance(fd, file):
             fd = fd.fileno()
         return _fallocate(fd, mode, offset, len)
