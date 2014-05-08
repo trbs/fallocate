@@ -42,7 +42,7 @@ setup(
     name = "fallocate",
     version = __version__,
     description = "Module to expose posix_fallocate(3), posix_fadvise(3) and fallocate(2)",
-    long_description = open("README", "r").read(),
+    long_description = open("README.rst", "r").read(),
     author = "I.S. van Oostveen",
     author_email = "trbs@trbs.net",
     url = "https://github.com/trbs/fallocate",
