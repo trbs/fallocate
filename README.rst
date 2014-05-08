@@ -40,13 +40,17 @@ for len bytes.
 mode is only available in Linux.
 
 It should always be 0 unless one of the two following possible flags are
-specified:
+specified
+
+::
+
     FALLOC_FL_KEEP_SIZE  - do not grow file, default is extend size
     FALLOC_FL_PUNCH_HOLE - punches a hole in file, de-allocates range
 
 Example:
 
 ::
+
     # preallocate using fallocate a 1kb file
     with open("/tmp/test.file", "w+b") as f:
         fallocate(f, 0, 1024)
