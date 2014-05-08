@@ -22,10 +22,10 @@ if platform.system() == "Linux":
     def fallocate_punch_hole_test():
         with tempfile.NamedTemporaryFile() as ntf:
             assert os.path.getsize(ntf.name) == 0
-            ntf.write("Hello World")
+            ntf.write(b"Hello World")
             ntf.flush()
             ntf.seek(0)
-            assert ntf.read() == "Hello World"
+            assert ntf.read() == b"Hello World"
             fallocate(ntf.fileno(), 6, 4, mode=FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE)
             ntf.seek(0)
-            assert ntf.read() == "Hello \x00\x00\x00\x00d"
+            assert ntf.read() == b"Hello \x00\x00\x00\x00d"
