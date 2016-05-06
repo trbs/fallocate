@@ -46,7 +46,7 @@ setup(
     author = "I.S. van Oostveen",
     author_email = "trbs@trbs.net",
     url = "https://github.com/trbs/fallocate",
-    license = "Python License",
+    license = "Python Software Foundation License",
     keywords = "posix_fallocate posix_fadvise fallocate",
     classifiers = [
         'Development Status :: 5 - Production/Stable',
@@ -58,6 +58,7 @@ setup(
         'Intended Audience :: Developers',
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS :: MacOS X',
+        'License :: OSI Approved :: Python Software Foundation License',
     ],
     packages = [
         'fallocate',
