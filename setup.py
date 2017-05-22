@@ -28,7 +28,7 @@ if sys.platform == "darwin":
     if find_in_file("/usr/include/sys/fcntl.h", "F_ALLOCATECONTIG"):
         defs.append(("HAVE_APPLE_F_ALLOCATECONTIG", None))
 else:
-    if find_in_glob("/usr/include/*/bits/fcntl.h", "fallocate") or find_in_glob("/usr/include/bits/fcntl.h", "fallocate"):
+    if find_in_glob("/usr/include/*/bits/fcntl.h", "fallocate") or find_in_glob("/usr/include/bits/fcntl*.h", "fallocate"):
         defs.append(("HAVE_FALLOCATE", None))
     if find_in_file("/usr/include/fcntl.h", "posix_fallocate"):
         defs.append(("HAVE_POSIX_FALLOCATE", None))
