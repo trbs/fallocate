@@ -3,8 +3,6 @@
 #include <errno.h>
 #ifdef linux
 #include <linux/falloc.h>
-// on linux just assume fallocate is there
-#define HAVE_FALLOCATE
 #endif
 
 
