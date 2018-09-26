@@ -42,13 +42,19 @@ for len bytes.
 
 mode is only available in Linux.
 
-It should always be 0 unless one of the two following possible flags are
+It should always be 0 unless one of the following possible flags are
 specified
 
 ::
 
-    FALLOC_FL_KEEP_SIZE  - do not grow file, default is extend size
-    FALLOC_FL_PUNCH_HOLE - punches a hole in file, de-allocates range
+    FALLOC_FL_KEEP_SIZE     - do not grow file, default is extend size
+    FALLOC_FL_PUNCH_HOLE    - punches a hole in file, de-allocates range
+    FALLOC_FL_COLLAPSE_SIZE - remove a range of a file without leaving a hole
+
+*Note*: `FALLOC_FL_COLLAPSE_SIZE` was introduced in Linux kernel v3.15 and is
+only available on certain filesystems (e.g. ext4, xfs, etc). In order to get
+access to it, you must build and run on a kernel and filesystem that both
+support it.
 
 Example:
 
