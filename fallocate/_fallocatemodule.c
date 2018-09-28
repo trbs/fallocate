@@ -37,7 +37,8 @@ at offset and continuing for len bytes.\n\n\
 mode is only available in Linux, it should always be 0 unless one of the\n\
 two following possible flags are specified:\n\n\
   FALLOC_FL_KEEP_SIZE  - do not grow file, default is extend size\n\
-  FALLOC_FL_PUNCH_HOLE - punches a hole in file, de-allocates range\n");
+  FALLOC_FL_PUNCH_HOLE - punches a hole in file, de-allocates range\n\
+  FALLOC_FL_COLLAPSE_SIZE - remove a range of a file without leaving a hole\n");
 
 static PyObject *
 fallocate_fallocate(PyObject *self, PyObject *args)
@@ -181,6 +182,9 @@ init_fallocate(void)
 
 #ifdef HAVE_FALLOCATE
     if (PyModule_AddIntMacro(m, FALLOC_FL_KEEP_SIZE) == -1 ||
+#ifdef FALLOC_FL_COLLAPSE_RANGE
+        PyModule_AddIntMacro(m, FALLOC_FL_COLLAPSE_RANGE) == -1 ||
+#endif
         PyModule_AddIntMacro(m, FALLOC_FL_PUNCH_HOLE) == -1)
 #if PY_MAJOR_VERSION >= 3
         return NULL;

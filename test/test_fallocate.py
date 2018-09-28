@@ -29,3 +29,19 @@ if platform.system() == "Linux":
             fallocate(ntf.fileno(), 6, 4, mode=FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE)
             ntf.seek(0)
             assert ntf.read() == b"Hello \x00\x00\x00\x00d"
+
+    def fallocate_collapse_size_test():
+        try:
+            from fallocate import FALLOC_FL_COLLAPSE_SIZE
+        except:
+            return # this installation doesn't have access to FALLOC_FL_COLLAPSE_SIZE, skip
+
+        with tempfile.NamedTemporaryFile() as ntf:
+            assert os.path.getsize(ntf.name) == 0
+            ntf.write(b"Hello World")
+            ntf.flush()
+            ntf.seek(0)
+            assert ntf.read() == b"Hello World"
+            fallocate(ntf.fileno(), 0, 6, mode=FALLOC_FL_COLLAPSE_SIZE)
+            ntf.seek(0)
+            assert ntf.read() == b"World"

@@ -15,10 +15,11 @@ try:
 
         mode is only available in Linux.
 
-        It should always be 0 unless one of the two following possible flags are
+        It should always be 0 unless one of the following possible flags are
         specified:
-            FALLOC_FL_KEEP_SIZE  - do not grow file, default is extend size
-            FALLOC_FL_PUNCH_HOLE - punches a hole in file, de-allocates range
+            FALLOC_FL_KEEP_SIZE     - do not grow file, default is extend size
+            FALLOC_FL_PUNCH_HOLE    - punches a hole in file, de-allocates range
+            FALLOC_FL_COLLAPSE_SIZE - remove a range of a file without leaving a hole
         """
         if hasattr(fd, 'fileno'):
             fd = fd.fileno()
@@ -29,7 +30,7 @@ except ImportError:
         """ fallocate(2) or OSX equivalent was not found on this system"""
         warnings.warn("fallocate(2) or OSX equivalent was not found on this system")
 try:
-    from ._fallocate import FALLOC_FL_KEEP_SIZE, FALLOC_FL_PUNCH_HOLE
+    from ._fallocate import FALLOC_FL_KEEP_SIZE, FALLOC_FL_PUNCH_HOLE, FALLOC_FL_COLLAPSE_SIZE
 except ImportError:
     pass
 
