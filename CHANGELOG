@@ -1,0 +1,10 @@
+
+Changelog
+=========
+
+1.6.4
+-----
+
+- add FALLOC_FL_COLLAPSE_SIZE mode
+- search all fcntl*.h files in /usr/include/*/bits/ fixes build on newer linux versions
+
