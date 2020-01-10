@@ -3,10 +3,12 @@
 import os
 import sys
 import glob
+import warnings
 from distutils.command.build_ext import build_ext
 from distutils.core import setup
 from distutils.extension import Extension
 from fallocate import __version__
+
 
 def find_in_file(filename, s):
     try:
@@ -16,27 +18,51 @@ def find_in_file(filename, s):
     except IOError:
         return False
 
+
 def find_in_glob(g, s):
     for filename in glob.glob(g):
         if find_in_file(filename, s):
             return True
     return False
 
+
+def with_prefix(prefixen, func):
+    def newfunc(*args):
+        for prefix in prefixen:
+            if func(prefix + args[0], *args[1:]):
+                return True
+        return False
+
+
 defs = []
 
 if sys.platform == "darwin":
-    if find_in_file("/usr/include/sys/fcntl.h", "F_ALLOCATECONTIG"):
+    XCODE_PREFIX = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+    find_in_darwin_file = with_prefix(['', XCODE_PREFIX], find_in_file)
+    if find_in_darwin_file("/usr/include/sys/fcntl.h", "F_ALLOCATECONTIG"):
         defs.append(("HAVE_APPLE_F_ALLOCATECONTIG", None))
+    else:
+        warnings.warn(
+            "We can't find F_ALLOCATECONTIG on a Mac! This is impossible!")
 else:
-    if find_in_glob("/usr/include/*/bits/fcntl*.h", "fallocate") or find_in_glob("/usr/include/bits/fcntl*.h", "fallocate"):
+    if find_in_glob(
+            "/usr/include/*/bits/fcntl*.h", "fallocate") or find_in_glob(
+                "/usr/include/bits/fcntl*.h", "fallocate"):
         defs.append(("HAVE_FALLOCATE", None))
     if find_in_file("/usr/include/fcntl.h", "posix_fallocate"):
         defs.append(("HAVE_POSIX_FALLOCATE", None))
     if find_in_file("/usr/include/fcntl.h", "posix_fadvise"):
         defs.append(("HAVE_POSIX_FADVISE", None))
 
+if sum(1 for x in defs if 'ALLOCATE' in x) == 0:
+    warnings.warn(
+        "Setup.py cannot find a fallocate() or equivalent on your platform ({0}).".
+        format(sys.platform))
 
-_fallocate = Extension('fallocate/_fallocate', sources=['fallocate/_fallocatemodule.c'], define_macros=defs)
+_fallocate = Extension(
+    'fallocate/_fallocate',
+    sources=['fallocate/_fallocatemodule.c'],
+    define_macros=defs)
 
 setup(
     name = "fallocate",
