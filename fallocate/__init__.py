@@ -4,6 +4,7 @@ __version__ = "1.6.4"
 
 try:
     from ._fallocate import fallocate as _fallocate
+
     def fallocate(fd, offset, len, mode=0):
         """
         fallocate(fd, offset, len, [mode=0])
@@ -29,15 +30,17 @@ except ImportError:
     def fallocate(fd, offset, len, mode=0):
         """ fallocate(2) or OSX equivalent was not found on this system"""
         warnings.warn("fallocate(2) or OSX equivalent was not found on this system")
+
 try:
-    from ._fallocate import FALLOC_FL_KEEP_SIZE, FALLOC_FL_PUNCH_HOLE, FALLOC_FL_COLLAPSE_SIZE
+    from ._fallocate import FALLOC_FL_KEEP_SIZE, FALLOC_FL_PUNCH_HOLE, FALLOC_FL_COLLAPSE_SIZE  # NOQA
 except ImportError:
     pass
 
 try:
     from ._fallocate import posix_fallocate as _posix_fallocate
     from ._fallocate import posix_fadvise as _posix_fadvise
-    from ._fallocate import POSIX_FADV_NORMAL, POSIX_FADV_SEQUENTIAL, POSIX_FADV_RANDOM, POSIX_FADV_NOREUSE, POSIX_FADV_WILLNEED, POSIX_FADV_DONTNEED
+    from ._fallocate import POSIX_FADV_NORMAL, POSIX_FADV_SEQUENTIAL, POSIX_FADV_RANDOM, POSIX_FADV_NOREUSE, POSIX_FADV_WILLNEED, POSIX_FADV_DONTNEED  # NOQA
+
     def posix_fallocate(fd, offset, len):
         if hasattr(fd, 'fileno'):
             fd = fd.fileno()

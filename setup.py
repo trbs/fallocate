@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import os
 import sys
 import glob
 import warnings
@@ -34,6 +33,7 @@ def with_prefix(prefixen, func):
         return False
     return newfunc
 
+
 defs = []
 
 if sys.platform == "darwin":
@@ -65,16 +65,16 @@ _fallocate = Extension(
     define_macros=defs)
 
 setup(
-    name = "fallocate",
-    version = __version__,
-    description = "Module to expose posix_fallocate(3), posix_fadvise(3) and fallocate(2)",
-    long_description = open("README.rst", "r").read(),
-    author = "I.S. van Oostveen",
-    author_email = "trbs@trbs.net",
-    url = "https://github.com/trbs/fallocate",
-    license = "Python Software Foundation License",
-    keywords = "posix_fallocate posix_fadvise fallocate",
-    classifiers = [
+    name="fallocate",
+    version=__version__,
+    description="Module to expose posix_fallocate(3), posix_fadvise(3) and fallocate(2)",
+    long_description=open("README.rst", "r").read(),
+    author="I.S. van Oostveen",
+    author_email="trbs@trbs.net",
+    url="https://github.com/trbs/fallocate",
+    license="Python Software Foundation License",
+    keywords="posix_fallocate posix_fadvise fallocate",
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
@@ -86,11 +86,11 @@ setup(
         'Operating System :: MacOS :: MacOS X',
         'License :: OSI Approved :: Python Software Foundation License',
     ],
-    packages = [
+    packages=[
         'fallocate',
     ],
-    ext_modules = [_fallocate],
-    cmdclass = {
+    ext_modules=[_fallocate],
+    cmdclass={
         'build_ext': build_ext,
     },
 )
