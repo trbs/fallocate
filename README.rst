@@ -26,9 +26,13 @@ While in C the function looks like:
 
   fallocate(fd, mode, offset, length)
 
-The main reason for this is that the mode argument tends not to be used much and
-thus having the default as a keyword argument is much easier then having to
+The main reason for this is that the mode argument tends not to be used much
+and thus having the default as a keyword argument is much easier then having to
 specify 0 everytime.
+
+Windows is not supported at this point, as there is no efficient way of
+ensuring zero-initialization. See `StackOverflow
+<https://stackoverflow.com/questions/7970333>`_ for details.
 
 Usage
 =====
@@ -40,7 +44,7 @@ the caller to directly manipulate the allocated disk space for the file
 referred to by fd for the byte range starting at offset and continuing
 for len bytes.
 
-mode is only available in Linux.
+`mode` is only available in Linux.
 
 It should always be 0 unless one of the following possible flags are
 specified
