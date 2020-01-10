@@ -32,7 +32,7 @@ def with_prefix(prefixen, func):
             if func(prefix + args[0], *args[1:]):
                 return True
         return False
-
+    return newfunc
 
 defs = []
 
