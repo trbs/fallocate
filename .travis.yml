@@ -11,6 +11,18 @@ jobs:
     - os: osx
       osx_image: xcode11.3
       language: shell
+      before_install:
+        - |
+          brew update
+          brew install pyenv
+          eval "$(pyenv init -)"
+          PYVER=3.7
+          # Install the latest release of the specified Python version using pyenv.
+          PYVER="$(pyenv install --list | grep -E "^\\s*$PYVER" | sort -n -t. -k3 | tail -n1)"
+          pyenv install $PYVER
+          pyenv global $PYVER
+          echo "Selected Python $PYVER"
+          python --version
 
 install:
   - "pip install nose"
