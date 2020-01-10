@@ -14,7 +14,7 @@ jobs:
       before_install:
         - |
           brew update
-          brew install pyenv
+          brew outdated pyenv || brew upgrade pyenv
           eval "$(pyenv init -)"
           PYVER=3.7
           # Install the latest release of the specified Python version using pyenv.
