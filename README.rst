@@ -64,6 +64,8 @@ Example:
 
 ::
 
+    from fallocate import fallocate
+
     # preallocate using fallocate a 1kb file
     with open("/tmp/test.file", "w+b") as f:
         fallocate(f, 0, 1024)
