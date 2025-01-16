@@ -2,6 +2,12 @@
 Changelog
 =========
 
+1.6.5
+-----
+
+- setup.py fix warning for failure to detect header files
+
+
 1.6.4
 -----
 
