@@ -54,7 +54,7 @@ else:
     if find_in_file("/usr/include/fcntl.h", "posix_fadvise"):
         defs.append(("HAVE_POSIX_FADVISE", None))
 
-if sum(1 for x in defs if 'ALLOCATE' in x) == 0:
+if not any(x for x in defs if 'ALLOCATE' in x[0]):
     warnings.warn(
         "Setup.py cannot find a fallocate() or equivalent on your platform ({0}).".
         format(sys.platform))
